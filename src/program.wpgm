@@ -1,0 +1,43 @@
+import wollok.game.*
+import auto.*
+import pared.*
+
+program miPrimerWollokGame {
+	
+	// límites del tablero de juego
+	game.width(14)
+	game.height(8)
+	
+	// fondo del tablero de juego
+	game.boardGround("empedrado.jpg")
+	
+	// agregamos a nuestro objeto auto
+	game.addVisualCharacter(autoRojo)
+	game.addVisual(autoAzul)
+	game.addVisual(autoVerde)
+	
+	// asignar teclas
+	
+	//MOVIMIENTO
+	/*opcion 1, hay otras opciones pero bueno */
+	keyboard.a().onPressDo{autoAzul.izquierda()}
+	keyboard.d().onPressDo{autoAzul.derecha()}
+	keyboard.w().onPressDo{autoAzul.arriba()}
+	keyboard.s().onPressDo{autoAzul.abajo()}
+	
+	// ACCIONES O CAMBIOS
+	keyboard.enter().onPressDo{autoRojo.cambiarColor()}
+	keyboard.p().onPressDo{pared.aparecer()}
+	
+	// colliciones
+	game.whenCollideDo(autoAzul, {chocar => autoAzul.chocar(pared)})
+	game.whenCollideDo(autoRojo, {chocar => autoRojo.chocar(pared)})
+	game.whenCollideDo(autoAzul, {chocar => autoAzul.chocar(autoVerde)})
+	game.whenCollideDo(autoRojo, {chocar => autoRojo.chocar(autoVerde)})
+	
+	// tiempo
+	game.onTick(500, "autoCruzando", {autoVerde.derecha()})	
+	
+	// que arranque el juego!
+	game.start()
+}
